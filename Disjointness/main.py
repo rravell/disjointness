@@ -51,10 +51,13 @@ if __name__ == '__main__':
     Disjoint = pic.new_param('Disjoint', Disjoint)
     C= pic.new_param('C', coefficients)
     B = P.add_variable('B',NumberOfCoefficients)
-    #P.add_constraint(A*B < C)
+    P.add_constraint(A*B < C)
     for j in range (0, NumberOfCoefficients/(K+1) + 1):
         P.add_constraint(B[(K+1)*j-1]==0)
-    objective = np.dot(Disjoint.transpose(),B)
+    for j in range (0, N*N): #ESTOS CONSTRAINT DEPENDEN DE N, SI CAMBIO N HAY QUE CAMBIARLOS
+        P.add_constraint(B[(K+1)*K + (K+1)*(K+1)*j]==0)
+        P.add_constraint(B[(K+1)*(K+1) - 2 + (K+1)*(K+1)*j]==0)
+    objective = np.dot(Disjoint.T,B)
     P.set_objective('max', objective)
     P.solve(verbose=0,solver='cvxopt')
     B_opt = B.value
