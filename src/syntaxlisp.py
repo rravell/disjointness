@@ -1,10 +1,6 @@
-'''
-Created on Feb 14, 2019
 
-@author: ricard
-'''
 
-def lispsyntax(functional, N, K):
+def syntaxlisp(functional, N, K):
     text=open("lispsyntax.txt", 'wa')
     for j in range(0, np.size(functional)):
         if functional[j]!=0:
@@ -16,8 +12,8 @@ def lispsyntax(functional, N, K):
                 NumberOfOutputB=NumberOfCoefficient%K
             
                 Number=functional[j]
-                a= "{} A{}/{} B{}/{} + " .format(Number, NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB)
-                text.write(a)
+                syntax= "{} A{}/{} B{}/{} + " .format(Number, NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB)
+                text.write(syntax)
                 
                 
 
