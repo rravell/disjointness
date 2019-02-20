@@ -91,8 +91,14 @@ class BellPolytope:
         
         return ineffResistInequality
     
+    def __computeLocalBound(self,ineq,vertices):
+        return max(map(lambda vector : np.dot(ineq,vector),vertices))
+    
+    def computeLocalBound(self,ineq):
+        return self.__computeLocalBound(ineq,self.getVertices())
+    
     def __makeIneqBoundedOnAbortDist(self,ineq):
         abortingDists = self.__generateVertices(self.parties,self.N,self.K+1)
-        bound = max(map(lambda vector : np.dot(ineq[1:],vector),abortingDists))
+        bound = self.__computeLocalBound(ineq[1:], abortingDists)
         ineffResistIneq = np.concatenate(([0],np.array(ineq[1:]))) if bound==0 else np.concatenate(([1],(1/bound)*np.array(ineq[1:]))) 
         return ineffResistIneq
