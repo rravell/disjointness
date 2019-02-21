@@ -10,7 +10,7 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    inputs = 2
+    inputs = 6
     outputs = 2
      
     K = outputs+1
@@ -25,7 +25,7 @@ if __name__ == '__main__':
     nConstraints =  nZeroConstraints + nLowerBoundOnDeterministicConstraints + nUpperBoundOnDeterministicConstraints
     nVariables = (K*N)**2
      
-    matrixHRepresentation=np.zeros((nConstraints,1+nVariables))
+    matrixHRepresentation=np.zeros((nConstraints,1+nVariables),np.float16)
      
     #IMPOSING THAT THE BELL COEFFICIENTS FOR ABORT EVENTS ARE == 0
     rowNum=0
@@ -59,6 +59,11 @@ if __name__ == '__main__':
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
     Disjoint=np.concatenate((vector2,vector,vector2,vector2,vector2,vector2,vector1,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector1,vector1))
     Disjoint2=np.concatenate((vector2,vector2,vector2,vector1))
+    
+    vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
+    vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
+    pseudoDisjoint=np.concatenate((vector1,vector2,vector2,vector1,vector1,vector2,vector2,vector1,vector2,vector1,vector2,vector1,vector2,vector2,vector1,vector2,vector1,vector1,vector1,vector1,vector2,vector1,vector1,vector1,vector1,vector2,vector1,vector1,vector1,vector1,vector2,vector1,vector1,vector1,vector1,vector1))    
+    
     #EQ'
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #HAMMING DISTANCE N/2
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #IGUALES
@@ -74,7 +79,7 @@ if __name__ == '__main__':
     
     mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
     mat.obj_type = cdd.LPObjType.MAX
-    mat.obj_func = tuple(np.concatenate(([0],Disjoint2)))
+    mat.obj_func = tuple(np.concatenate(([0],pseudoDisjoint)))
     
     lp = cdd.LinProg(mat)
     lp.solve()

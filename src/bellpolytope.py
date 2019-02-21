@@ -47,7 +47,7 @@ class BellPolytope:
         D=np.zeros((outputsPerParty**inputsPerParty,inputsPerParty), dtype=int)
         for _ in range(outputsPerParty**inputsPerParty):
             D[_][:]=np.array(np.unravel_index(_,(outputsPerParty,)*inputsPerParty))
-        vertices=np.zeros(((outputsPerParty**(inputsPerParty*parties),)+(inputsPerParty,)*parties+(outputsPerParty,)*parties))
+        vertices=np.zeros(((outputsPerParty**(inputsPerParty*parties),)+(inputsPerParty,)*parties+(outputsPerParty,)*parties),np.float16)
         c=0
         for _ in product(range(outputsPerParty**inputsPerParty), repeat=parties):
             for x in product(range(inputsPerParty), repeat=parties):
