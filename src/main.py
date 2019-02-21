@@ -10,7 +10,7 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    inputs = 8
+    inputs = 2
     outputs = 2
      
     K = outputs+1
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
     Disjoint=np.concatenate((vector2,vector,vector2,vector2,vector2,vector2,vector1,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector1,vector1))
-    
+    Disjoint2=np.concatenate((vector2,vector2,vector2,vector1))
     #EQ'
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #HAMMING DISTANCE N/2
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #IGUALES
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     
     mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
     mat.obj_type = cdd.LPObjType.MAX
-    mat.obj_func = tuple(np.concatenate(([0],GapHammingDistance)))
+    mat.obj_func = tuple(np.concatenate(([0],Disjoint2)))
     
     lp = cdd.LinProg(mat)
     lp.solve()
