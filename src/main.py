@@ -10,7 +10,7 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    inputs = 4
+    inputs = 8
     outputs = 2
      
     K = outputs+1
