@@ -21,6 +21,6 @@ if __name__ == '__main__':
         NumberOfOutputA=NumberOfCoefficient//K 
         NumberOfOutputB=NumberOfCoefficient%K
         Number=Disjoint[j]
-        syntax= "(A{}/{} B{}/{} = {} C)" .format(NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB, Number)
+        syntax= "(A{}/{} B{}/{} = {} C1/1)" .format(NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB, Number)
         text.write(syntax +'\n' ) 
     text.close()
