@@ -10,7 +10,7 @@ import numpy as np
 
 
 if __name__ == '__main__':
-    inputs = 6
+    inputs = 4
     outputs = 2
      
     K = outputs+1
@@ -76,10 +76,10 @@ if __name__ == '__main__':
     vector3=np.array([0.25, 0.25, 0, 0.25, 0.25, 0, 0, 0, 0]) #CASO CONTRARIO
     GapHammingDistance=np.concatenate((vector2,vector3,vector3,vector1,vector3,vector2,vector1,vector3,vector3,vector1,vector2,vector3,vector1,vector3,vector3,vector2))
     
-    
+    functional=np.loadtxt('vectorqdisjoint.txt')
     mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
     mat.obj_type = cdd.LPObjType.MAX
-    mat.obj_func = tuple(np.concatenate(([0],pseudoDisjoint)))
+    mat.obj_func = tuple(np.concatenate(([0],functional)))
     
     lp = cdd.LinProg(mat)
     lp.solve()
