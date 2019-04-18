@@ -57,7 +57,7 @@ if __name__ == '__main__':
     #DISJOINTNESS                                              
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
-    Disjoint=np.concatenate((vector2,vector2,vector2,vector2,vector2,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector1,vector1))
+    Disjoint=np.concatenate((vector2,vector2,vector2,vector2,vector2,vector1,vector2,vector1,vector2,vector2,vector1,vector1,vector2,vector1,vector1,vector1))
     Disjoint2=np.concatenate((vector2,vector2,vector2,vector1))
     
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     vector3=np.array([0.25, 0.25, 0, 0.25, 0.25, 0, 0, 0, 0]) #CASO CONTRARIO
     GapHammingDistance=np.concatenate((vector2,vector3,vector3,vector1,vector3,vector2,vector1,vector3,vector3,vector1,vector2,vector3,vector1,vector3,vector3,vector2))
     
-    functional=np.loadtxt('vectorqdisjoint.txt')
+    functional=np.loadtxt('qdisjointnessdist.txt')
     mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
     mat.obj_type = cdd.LPObjType.MAX
     mat.obj_func = tuple(np.concatenate(([0],functional)))
