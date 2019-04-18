@@ -57,7 +57,7 @@ if __name__ == '__main__':
     #DISJOINTNESS                                              
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
     vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
-    Disjoint=np.concatenate((vector2,vector,vector2,vector2,vector2,vector2,vector1,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector1,vector1))
+    Disjoint=np.concatenate((vector2,vector2,vector2,vector2,vector2,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector2,vector1,vector1,vector1))
     Disjoint2=np.concatenate((vector2,vector2,vector2,vector1))
     
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
