@@ -30,8 +30,8 @@ qdisjointness=np.array(disjointnessaborting)
 
 #Bucle para obtener qdisjoint para los eventos que si abortan
 for i in range (0, np.size(qdisjointness)):
-    NumberOfGroup=i//(K*N)
-    NumberOfCoefficient=i%(K*N)
+    NumberOfGroup=i//(K**2)
+    NumberOfCoefficient=i%(K**2)
     if NumberOfCoefficient<(K*(K-1)):
         if (i+1)%K==0:
             qdisjointness[i]=monomialexpectedvalue-qdisjointness[i-1]-qdisjointness[i-2]

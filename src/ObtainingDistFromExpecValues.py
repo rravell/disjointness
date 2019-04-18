@@ -15,8 +15,8 @@ values={
 
 qdisjointness=np.zeros((N*K)**2)
 for i in range (0, np.size(qdisjointness)):
-    NumberOfGroup=i//(K*N)
-    NumberOfCoefficient=i%(K*N)
+    NumberOfGroup=i//(K**2)
+    NumberOfCoefficient=i%(K**2)
     NumberOfInputA=NumberOfGroup//N 
     NumberOfInputB=NumberOfGroup%N                 
     NumberOfOutputA=NumberOfCoefficient//K 
