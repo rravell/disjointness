@@ -1,0 +1,25 @@
+N=4
+K=2+1
+
+For disjointness:
+p=0.2914
+expectation values=0.2812
+qdisjointessdist has the ''quantum'' distribution which obtains above results.
+B(q)=1.0684 (obtained with eff*),
+the functional is the following: -2/3 1/3 0 1/3 -2/3 0 0 0 0 -1/3 0 0 0 -2/3 0 0 0 0 -1/3 1/3 0 1/3 -2/3 0 0 0 0 -1/3 1/3 0 1/3 -1/3 0 0 0 0 -2/3 0 0 0 -2/3 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 -2/3 1/3 0 1/3 -2/3 0 0 0 0 1/3 -2/3 0 -2/3 1/3 0 0 0 0 -1/3 1/3 0 1/3 -1/3 0 0 0 0 -2/3 1/3 0 1/3 -2/3 0 0 0 0 0 -1 0 -2/3 0 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 -1/3 1/3 0 1/3 -1/3 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 1/3 -2/3 0 -1/3 1/3 0 0 0 0 -1/3 -1/3 0 0 -1/3 0 0 0 0
+B(q')= 1.291 (obtained using this functional in Lisp)
+
+
+For inequality prime:
+p=0.413
+expectation values=0.3287
+qEqualityprimedist has the distribution
+B(q) = 1.0325 (obtained with eff*)
+the functional for eff* is the following:
+-2/3 0 0 0 -2/3 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 1/3 -2/3 0 -2/3 1/3 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 1/3 -2/3 0 -2/3 1/3 0 0 0 0 -1/3 1/3 0 1/3 -1/3 0 0 0 0 0 -2/3 0 -2/3 0 0 0 0 0 1/3 -1/3 0 -1/3 1/3 0 0 0 0 0 -2/3 0 -2/3 0 0 0 0 0 0 -2/3 0 -2/3 0 0 0 0 0 -1/3 2/3 0 2/3 -1/3 0 0 0 0 1/3 -2/3 0 -2/3 1/3 0 0 0 0 2/3 -1/3 0 -1/3 2/3 0 0 0 0 1/3 -2/3 0 -2/3 1/3 0 0 0 0 0 -2/3 0 -2/3 0 0 0 0 0 -2/3 0 0 0 -2/3 0 0 0 0
+B(q')= 1.437(obtained in Lisp)
+
+
+For gamming distance:
+p=1
+B(q)=

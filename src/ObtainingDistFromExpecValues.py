@@ -10,7 +10,7 @@ N=4
 K=2+1
 monomialexpectedvalue=0.3
 
-values={
+expectationvalues={
     }
 
 qdisjointness=np.zeros((N*K)**2)
@@ -25,7 +25,7 @@ for i in range (0, np.size(qdisjointness)):
         if (i+1)%K==0:
             qdisjointness[i]=monomialexpectedvalue-qdisjointness[i-1]-qdisjointness[i-2]
         else:
-            qdisjointness[i]=values['A{}|{} B{}|{}' .format(NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB)]
+            qdisjointness[i]=expectationvalues['A{}|{} B{}|{}' .format(NumberOfOutputA, NumberOfInputA, NumberOfOutputB, NumberOfInputB)]
     else:
         if NumberOfCoefficient!=K**2-1:
             qdisjointness[i]=monomialexpectedvalue-qdisjointness[i-K] - qdisjointness[i-2*K]
