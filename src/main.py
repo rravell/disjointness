@@ -1,16 +1,11 @@
 
-'''
-Created on Feb 12, 2019
-
-@author: rravell
-'''
 from bellpolytope import BellPolytope
 import cdd as cdd
 import numpy as np
 
 
 if __name__ == '__main__':
-    inputs = 4
+    inputs = 8
     outputs = 2
      
     K = outputs+1
@@ -55,9 +50,10 @@ if __name__ == '__main__':
         rowNum+=1
     
     #DISJOINTNESS                                              
-    vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
-    vector2=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
-    Disjoint=np.concatenate((vector2,vector2,vector2,vector2,vector2,vector1,vector2,vector1,vector2,vector2,vector1,vector1,vector2,vector1,vector1,vector1))
+    v0=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
+    v1=np.array([0, 0.5, 0, 0.5, 0, 0, 0, 0, 0]) #SI DISYUNTOS
+    #Disjoint=np.concatenate((v1,v1,v1,v1,v1,v0,v1,v0,v1,v1,v0,v0,v1,v0,v0,v0)) N=4
+    Disjoint=np.concatenate((v1,v1,v1,v1,v1,v1,v1,v1,v1,v0,v1,v1,v0,v0,v1,v0,v1,v1,v0,v1,v0,v1,v0,v0,v1,v1,v1,v0,v1,v0,v0,v0,v1,v0,v0,v1,v0,v0,v0,v0,v1,v0,v1,v0,v0,v0,v1,v0,v1,v1,v0,v0,v0,v0,v0,v0,v1,v0,v0,v0,v0,v0,v0,v0))
     Disjoint2=np.concatenate((vector2,vector2,vector2,vector1))
     
     vector1=np.array([0.5, 0, 0, 0, 0.5, 0, 0 ,0 ,0]) #NO DISYUNTOS
@@ -86,6 +82,4 @@ if __name__ == '__main__':
     print(lp.status)
     print(lp.obj_value)
     print(" ".join("{0}".format(val) for val in lp.primal_solution))
-    
-        
     
