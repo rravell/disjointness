@@ -75,7 +75,7 @@ if __name__ == '__main__':
     #functional=np.loadtxt('')
     mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
     mat.obj_type = cdd.LPObjType.MAX
-    mat.obj_func = tuple(np.concatenate(([0],GapHammingDistance)))
+    mat.obj_func = tuple(np.concatenate(([0],Disjoint)))
     
     lp = cdd.LinProg(mat)
     lp.solve()
