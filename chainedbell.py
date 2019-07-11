@@ -17,6 +17,8 @@ def createEffects(observables):
     return list(map(lambda observable :  
                        list(map(lambda eigvector : eigvector*eigvector.dag(),observable)),observables))
 
+def addEffectsForAbortOutcomes(effects):
+    return list(map(lambda povm : povm+[0*qt.qeye(dim)],effects))
 if __name__ == '__main__':
     
     dim=3
@@ -33,8 +35,8 @@ if __name__ == '__main__':
                     for r in range(0,dim)] 
                     for l in range(1,N+1)]
     
-    aliceEffects = addEffectsForAbortOutcomes(createEffects(eigVectAlice),dim)
-    bobEffects = addEffectsForAbortOutcomes(createEffects(eigVectBob),dim)
+    aliceEffects = addEffectsForAbortOutcomes(createEffects(eigVectAlice))
+    bobEffects = addEffectsForAbortOutcomes(createEffects(eigVectBob))
     psi=createMaxEntState(dim)
      
     distribution = computeDistributionFromStateAndEffects(psi,aliceEffects,bobEffects)

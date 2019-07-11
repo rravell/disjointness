@@ -11,6 +11,19 @@ from _functools import reduce
 from ncpol2sdpa.sdp_relaxation import imap
 import qutip as qt
 
+def createQubitObservable(unnormalizedBlochVector):
+    return 1/np.linalg.norm(unnormalizedBlochVector)*np.dot(unnormalizedBlochVector,[qt.sigmax(),qt.sigmay(),qt.sigmaz()])
+
+def effectForQubitPovm(weight,qubitObservable):
+    return weight*(qt.qeye(2)+qubitObservable)
+
+def projectorsForQubitObservable(qubitObservable):
+    return list(map(lambda sign : effectForQubitPovm(1/2, sign*qubitObservable),[1,-1]))
+
+
+def addEffectsForAbortOutcomes(effects,dim):
+    return list(map(lambda povm : povm+[0*qt.qeye(dim)],effects))
+
 def createMaxEntState(dimension):
     return 1/np.sqrt(dimension)*(np.sum([qt.tensor(qt.basis(dimension,i),
                                                    qt.basis(dimension,i)) for i in range(0,dimension)]))

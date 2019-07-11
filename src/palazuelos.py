@@ -17,24 +17,24 @@ def createEffects(observables):
     return list(map(lambda observable :  
                        list(map(lambda eigvector : eigvector*eigvector.dag(),observable)),observables))
 
+def addEffectsForAbortOutcomes(effects):
+    return list(map(lambda povm : povm+[0*qt.qeye(dim)],effects))
 if __name__ == '__main__':
     
-    dim=3
-    N=4
+    N=3
+    dim=N+1
     outputsAlice = [dim+1 for i in range(0,N)]
     outputsBob = [dim+1 for i in range(0,N)]
     
     
-    eigVectAlice= [[1/np.sqrt(dim)*np.sum([np.exp(2*np.pi*1j/dim*q*(r-(k-1/2)/N))*qt.basis(dim, q) for q in range(0,dim)])
-                    for r in range(0,dim)] 
-                    for k in range(1,N+1)]
+    eigVectAlice= [[] for x in range(1,N+1)]
     
     eigVectBob= [[1/np.sqrt(dim)*np.sum([np.exp(-2*np.pi*1j/dim*q*(r-l/N))*qt.basis(dim, q) for q in range(0,dim)])
                     for r in range(0,dim)] 
                     for l in range(1,N+1)]
     
-    aliceEffects = addEffectsForAbortOutcomes(createEffects(eigVectAlice),dim)
-    bobEffects = addEffectsForAbortOutcomes(createEffects(eigVectBob),dim)
+    aliceEffects = addEffectsForAbortOutcomes(createEffects(eigVectAlice))
+    bobEffects = addEffectsForAbortOutcomes(createEffects(eigVectBob))
     psi=createMaxEntState(dim)
      
     distribution = computeDistributionFromStateAndEffects(psi,aliceEffects,bobEffects)
