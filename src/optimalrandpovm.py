@@ -4,12 +4,10 @@ Created on Feb 12, 2019
 
 @author: rravell
 '''
-from bellpolytope import BellPolytope
 import cdd as cdd
 import numpy as np
 import itertools as it
 from _functools import reduce
-from ncpol2sdpa.sdp_relaxation import imap
 from linopttools import *
 import qutip as qt
 

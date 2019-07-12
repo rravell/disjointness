@@ -12,7 +12,9 @@ from ncpol2sdpa.sdp_relaxation import imap
 import qutip as qt
 
 def createQubitObservable(unnormalizedBlochVector):
-    return 1/np.linalg.norm(unnormalizedBlochVector)*np.dot(unnormalizedBlochVector,[qt.sigmax(),qt.sigmay(),qt.sigmaz()])
+    normalizedBlochVector=1/np.linalg.norm(unnormalizedBlochVector)*np.array(unnormalizedBlochVector)
+    paulies=[qt.sigmax(),qt.sigmay(),qt.sigmaz()]
+    return sum([paulies[i]*normalizedBlochVector[i] for i in range(0,3)])
 
 def effectForQubitPovm(weight,qubitObservable):
     return weight*(qt.qeye(2)+qubitObservable)
@@ -25,7 +27,7 @@ def addEffectsForAbortOutcomes(effects,dim):
     return list(map(lambda povm : povm+[0*qt.qeye(dim)],effects))
 
 def createMaxEntState(dimension):
-    return 1/np.sqrt(dimension)*(np.sum([qt.tensor(qt.basis(dimension,i),
+    return 1/np.sqrt(dimension)*(sum([qt.tensor(qt.basis(dimension,i),
                                                    qt.basis(dimension,i)) for i in range(0,dimension)]))
 
 def computeDistributionFromStateAndEffects(state,aliceEffects,bobEffects):
@@ -50,7 +52,8 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
     totalInputs = NAlice*NBob
      
     nZeroConstraints = 2*abortOutputs
-    nLowerBoundOnDeterministicConstraints = np.prod(outputsAlice)*np.prod(outputsBob)
+    #nLowerBoundOnDeterministicConstraints = np.prod(outputsAlice)*np.prod(outputsBob)
+    nLowerBoundOnDeterministicConstraints = 0
     nUpperBoundOnDeterministicConstraints = np.prod(outputsAlice)*np.prod(outputsBob)
     nConstraints =  nZeroConstraints + nLowerBoundOnDeterministicConstraints + nUpperBoundOnDeterministicConstraints
     nVariables = totalOutputs
