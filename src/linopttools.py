@@ -58,7 +58,7 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
     nConstraints =  nZeroConstraints + nLowerBoundOnDeterministicConstraints + nUpperBoundOnDeterministicConstraints
     nVariables = totalOutputs
      
-    matrixHRepresentation=np.zeros((nConstraints,1+nVariables),np.float16)
+    matrixHRepresentation=np.zeros((nConstraints,1+nVariables),np.int8)
      
     #IMPOSING THAT THE BELL COEFFICIENTS FOR ABORT EVENTS ARE == 0
     #BOB'S ABORTS
