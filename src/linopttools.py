@@ -57,8 +57,8 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
     nUpperBoundOnDeterministicConstraints = np.prod(outputsAlice)*np.prod(outputsBob)
     nConstraints =  nZeroConstraints + nLowerBoundOnDeterministicConstraints + nUpperBoundOnDeterministicConstraints
     nVariables = totalOutputs
-     
-    matrixHRepresentation=np.zeros((nConstraints,1+nVariables),np.float16)
+ 
+    matrixHRepresentation=np.zeros((nConstraints,1+nVariables),np.int8)
      
     #IMPOSING THAT THE BELL COEFFICIENTS FOR ABORT EVENTS ARE == 0
     #BOB'S ABORTS
@@ -88,18 +88,19 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
 #         rowNum+=1
      
     #IMPOSING THAT THE BELL FUNCTIONAL IS UPPER BOUNDED BY 1 ON LOCAL DISTRIBUTIONS WITH ABORT    
+    #vertices=BellPolytope(4,3).getVertices()
     aliceStrategies = generateStrategies(outputsAlice)
     bobStrategies = generateStrategies(outputsBob)
     
-    vertices=[strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
- 
-    #vertices=BellPolytope(4,3).getVertices()
-    for vector in vertices:
-        matrixHRepresentation[rowNum,0]=1
-        matrixHRepresentation[rowNum,1:]=-np.array(vector)
-        #matrixHRepresentation[rowNum+1,0]=4**2*(4**2-2)
-        #matrixHRepresentation[rowNum+1,1:]=np.array(vector)
-        rowNum+=1
+    #vertices=[strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
+    for stgAlice in aliceStrategies:
+        for stgBob in bobStrategies:
+            vertex=strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob)
+            matrixHRepresentation[rowNum,0]=1
+            matrixHRepresentation[rowNum,1:]=-np.array(vertex)
+            rowNum+=1
+            #matrixHRepresentation[rowNum+1,0]=4**2*(4**2-2)
+            #matrixHRepresentation[rowNum+1,1:]=np.array(vector)
     
     return matrixHRepresentation    
         
