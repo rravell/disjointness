@@ -120,6 +120,26 @@ def toVector(dictionary,outputsAlice,outputsBob):
                         vector.append(0)
     return vector
     
+def generateVerticesOf1bitOfOneWayCommScenarioh(outputsAlice,outputsBob):
+    effectiveOutputsBob = list(reduce(lambda acum,output : acum+[output,output],outputsBob,[]))
+    strAlice = generateStrategies(outputsAlice)
+    strAlice = [[[output,bit] for output in stgAlice for bit in (0,1)] for stgAlice in strAlice]
+    strBob = generateStrategies(effectiveOutputsBob)
+    vertices=[]
+    for stgAlice in strAlice:
+        for stgBob in strBob:
+            vector=[]
+            for x in range (0,len(outputsAlice)):
+                for y in range (0,len(outputsBob)):
+                    for a in range (0,outputsAlice[x]):
+                        for b in range (0,outputsBob[y]):
+                            if (a==stgAlice[x][0])&(b==stgBob[2*y+stgAlice[x][1]]):
+                                vector.append(1)
+                            else:
+                                vector.append(0)
+                                vertices.append(vector)
+
+    return vertices
 
 def generateStrategies(outputs):
     l=list(it.product(list(range(0,max(outputs))),repeat=len(outputs)))
