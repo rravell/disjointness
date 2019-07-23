@@ -15,62 +15,31 @@ import qutip as qt
 
 if __name__ == '__main__':
     
-    outputsAlice = [2,2,2,2,2,2,4]
-    outputsBob = [2,2,2,2,2,2,4]
-    
-    aliceUnBlochVectors = [[1,0,0],[0,1,0],[0,0,1]]
+     
+    outputsAlice = [2,2,2,2,3]
+    outputsBob = [2,2]
+        
+    aliceUnBlochVectors = [[1,0,0],[0,0,1],[0,0,1]]
     aliceObservables = list(map(lambda bloch : createQubitObservable(bloch),aliceUnBlochVectors))
     aliceEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),aliceObservables))
-    
-    delta=0.01
-    tetrahedronAlice = [[delta,0,1],[-delta,0,1],[0,delta,-1],[0,-delta,-1]]
-    aliceEffects += [list(map(lambda bloch : 
-                           effectForQubitPovm(1/4, createQubitObservable(bloch)),tetrahedronAlice))]
-    
-    
-    bobUnBlochVectors = [[1,0,0],[0,-1,0],[0,0,1]]
+     
+    plus=1/np.sqrt(2)*(qt.basis(2, 0)+qt.basis(2, 1))
+    minus=1/np.sqrt(2)*(qt.basis(2, 0)-qt.basis(2, 1))
+ 
+    epsilon=0.001
+    kraussPlus = np.cos(epsilon)*plus*plus.dag()+np.sin(epsilon)*minus*minus.dag()
+    kraussMinus =  -np.cos(epsilon)*minus*minus.dag()+np.sin(epsilon)*plus*plus.dag()
+    aliceEffects.append([kraussPlus*kraussPlus.dag(),kraussMinus*kraussMinus.dag()])
+     
+    symm3outDirect = [[0,0,1],[np.sin(2*np.pi/3),0,np.cos(2*np.pi/3)],[np.sin(4*np.pi/3),0,np.cos(4*np.pi/3)]]
+    symm3outPovm = list(map(lambda bloch : 
+                           effectForQubitPovm(1/3, createQubitObservable(bloch)),symm3outDirect))
+    aliceEffects.append(symm3outPovm)
+ 
+    mu = np.arctan(np.sin(2*epsilon))
+    bobUnBlochVectors = [[np.sin(mu),0,np.cos(mu)],[-np.sin(mu),0,np.cos(mu)]]
     bobObservables=list(map(lambda bloch : createQubitObservable(bloch),bobUnBlochVectors))
     bobEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),bobObservables))
-    
-    tetrahedronBob = [[1,-delta,0],[1,delta,0],[-1,0,delta],[-1,0,-delta]]
-    bobEffects += [list(map(lambda bloch : 
-                           effectForQubitPovm(1/4, createQubitObservable(bloch)),tetrahedronBob))]
-    
-#     outputsAlice = [2,2,2,2]
-#     outputsBob = [2,2,2,4]
-#     
-#     aliceBlochVectors = [[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]]
-#     aliceObservables = list(map(lambda bloch : createQubitObservable(bloch),aliceBlochVectors))
-#     aliceEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),aliceObservables))
-#     
-#     bobObservables=[qt.sigmax(),qt.sigmay(),qt.sigmaz()]
-#     bobEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),bobObservables))
-#     
-#     bobEffects += [list(map(lambda bloch : 
-#                            effectForQubitPovm(1/4, createQubitObservable(bloch)),aliceBlochVectors))]
-    
-    
-#     aliceUnBlochVectors = [[1,0,0],[0,0,1],[0,0,1]]
-#     aliceObservables = list(map(lambda bloch : createQubitObservable(bloch),aliceUnBlochVectors))
-#     aliceEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),aliceObservables))
-#     
-#     plus=1/np.sqrt(2)*(qt.basis(2, 0)+qt.basis(2, 1))
-#     minus=1/np.sqrt(2)*(qt.basis(2, 0)-qt.basis(2, 1))
-# 
-#     epsilon=np.pi/4-0.001
-#     kraussPlus = np.cos(epsilon)*plus*plus.dag()+np.sin(epsilon)*minus*minus.dag()
-#     kraussMinus =  -np.cos(epsilon)*minus*minus.dag()+np.sin(epsilon)*plus*plus.dag()
-#     aliceEffects.append([kraussPlus*kraussPlus.dag(),kraussMinus*kraussMinus.dag()])
-#     
-#     symm3outDirect = [[0,0,1],[np.sin(2*np.pi/3),0,np.cos(2*np.pi/3)],[np.sin(4*np.pi/3),0,np.cos(4*np.pi/3)]]
-#     symm3outPovm = list(map(lambda bloch : 
-#                            effectForQubitPovm(1/3, createQubitObservable(bloch)),symm3outDirect))
-#     aliceEffects.append(symm3outPovm)
-# 
-#     mu = np.arctan(np.sin(2*epsilon))
-#     bobUnBlochVectors = [[np.sin(mu),0,np.cos(mu)],[-np.sin(mu),0,np.cos(mu)]]
-#     bobObservables=list(map(lambda bloch : createQubitObservable(bloch),bobUnBlochVectors))
-#     bobEffects = list(map(lambda qubitObservable : projectorsForQubitObservable(qubitObservable),bobObservables))
     
     psi=createMaxEntState(2)
     dist=computeDistributionFromStateAndEffects(psi,bobEffects,aliceEffects)
@@ -100,8 +69,10 @@ if __name__ == '__main__':
         print(M.primalObjValue())
         print('local bound='+str(x.level()[len(vertices[0])]))
         bellFunctional=x.level()[0:len(vertices[0])]
-        print('quantum value='+str(np.dot(10**10*bellFunctional,dist)))
-        print(max([np.dot(10**10*bellFunctional,deterministicStg) for deterministicStg in vertices]))
+        print('quantum value='+str(np.dot(bellFunctional,dist)))
+        print(max([np.dot(bellFunctional,deterministicStg) for deterministicStg in vertices]))
 #     
         
     
+
+
