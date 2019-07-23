@@ -20,15 +20,20 @@ def createRandomTrine():
 
 if __name__ == '__main__':
     
-    outputsAlice = [4,4,4]
-    outputsBob = [4,4,4,4]
+    outputsAlice = [3,4,4]
+    outputsBob = [3,3,4,4]
     
     aliceTrines = [createRandomTrine() for _ in range(0,len(outputsAlice))]
     bobTrines = [createRandomTrine() for _ in range(0,len(outputsBob))]
         
-    aliceEffects = addEffectsForAbortOutcomes(aliceTrines,2)
-    bobEffects = addEffectsForAbortOutcomes(bobTrines,2)
+    aliceEffects = aliceTrines
+    aliceEffects[0] = projectorsForQubitObservable(createQubitObservable([1,0,0]))
+    aliceEffects = addEffectsForAbortOutcomes(aliceEffects,2)
     
+    bobEffects = bobTrines
+    bobEffects[0] = projectorsForQubitObservable(createQubitObservable([0,1,0]))
+    bobEffects[1] = projectorsForQubitObservable(createQubitObservable([0,0,1]))
+    bobEffects = addEffectsForAbortOutcomes(bobEffects,2)
     psi=createMaxEntState(2)
     
     dist=computeDistributionFromStateAndEffects(psi,aliceEffects,bobEffects)
