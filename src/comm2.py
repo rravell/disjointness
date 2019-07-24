@@ -72,7 +72,5 @@ if __name__ == '__main__':
         print('quantum value='+str(np.dot(bellFunctional,dist)))
         print(max([np.dot(bellFunctional,deterministicStg) for deterministicStg in vertices]))
 #     
-        
-    
 
 
