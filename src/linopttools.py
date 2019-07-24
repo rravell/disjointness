@@ -156,3 +156,25 @@ def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
                     else:
                         vector.append(0)
     return vector
+
+def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
+    communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
+    strgsAlice = [[[stgAlice[i],comm[i]] for i in range(0,len(stgAlice))] 
+                  for stgAlice in generateStrategies(outputsAlice) for comm in communicationStrgs]
+
+    strgsBob = generateStrategies(list(reduce(lambda acum,elem : acum+[elem,elem],outputsBob,[])))
+    
+    vertices = []
+    for stgAlice in strgsAlice:
+        for stgBob in strgsBob:
+            vector = []
+            for x in range (0,len(outputsAlice)):
+                for y in range (0,len(outputsBob)):
+                    for a in range (0,outputsAlice[x]):
+                        for b in range (0,outputsBob[y]):
+                            if (a==stgAlice[x][0])&(b==stgBob[2*y+stgAlice[x][1]]):
+                                vector.append(1)
+                            else:
+                                vector.append(0)
+            vertices.append(vector)
+    return vertices

@@ -5,4 +5,7 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/${PROJECT_DIR_NAME}/src</path>
 </pydev_pathproperty>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>C:\Users\gsenno\AppData\Local\Programs\Python\Python36\Lib\site-packages\cvxopt</path>
+</pydev_pathproperty>
 </pydev_project>
