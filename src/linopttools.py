@@ -103,8 +103,14 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
             #matrixHRepresentation[rowNum+1,1:]=np.array(vector)
     
     return matrixHRepresentation    
-        
 
+def generateLocalVertices(outputsAlice,outputsBob):
+    aliceStrategies = generateStrategies(outputsAlice)
+    bobStrategies = generateStrategies(outputsBob)
+    
+    return [strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
+    
+    
 def toString(a,b,x,y):
     return str(a)+','+str(b)+'|'+str(x)+','+str(y)
     
