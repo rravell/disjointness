@@ -8,15 +8,12 @@ from mosek.fusion import *
 import numpy as np
 import cvxopt as cvx
 import itertools as it
-from _functools import reduce
 from ncpol2sdpa.sdp_relaxation import imap
 from linopttools import *
 import qutip as qt
 from itertools import product
-
 import picos as pic
 
-from math import sqrt
 def CHAINED(n,A,B):
     result = 0
     for i in range(0,n-1):
@@ -24,17 +21,13 @@ def CHAINED(n,A,B):
     result+=pic.kron(A[n-1],B[n-1])-pic.kron(A[0],B[n-1])
     return result
 
-def CHSH(A,B):
-    #chsh bell op give observables
-    return pic.kron(A[0],B[0])+pic.kron(A[0],B[1])+pic.kron(A[1],B[0]) \
-            -pic.kron(A[1],B[1])
-
 if __name__ == '__main__':
     
     n=3
-    outputsAlice = list(map(lambda x : int(x*4),np.ones((2*n))))
-    outputsBob = list(map(lambda x : int(x*2),np.ones((n))))
+    outputsAlice = [4 for _ in range(0,n**2)]
+    outputsBob = [2 for _ in range(0,n)]
     
+    vertices=generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob) 
            
     alpha=5
      
@@ -100,7 +93,6 @@ if __name__ == '__main__':
                 print('index'+str(x1))
                
         
-    vertices=generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob) 
      
     with Model("lo1") as M:
 
