@@ -4,8 +4,9 @@ Created on Feb 12, 2019
 
 @author: rravell
 '''
-import cdd as cdd
+from mosek.fusion import *
 import numpy as np
+import cvxopt as cvx
 import itertools as it
 from _functools import reduce
 from linopttools import *
@@ -41,16 +42,44 @@ if __name__ == '__main__':
     
     dist=computeDistributionFromStateAndEffects(psi,aliceEffects,bobEffects)
 
-    matrixHRepresentation = createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob) 
-    mat = cdd.Matrix(matrixHRepresentation, number_type='fraction')
-    mat.obj_type = cdd.LPObjType.MAX
-    mat.obj_func = tuple(np.concatenate(([0],dist)))
+    vertices = generateLocalVertices(outputsAlice, outputsBob)
+    dist=computeDistributionFromStateAndEffects(psi,aliceEffects,bobEffects)
+
+    with Model("lo1") as M:
+
+        # Create variable 'x' of length 4
+        bellFunctional = M.variable("bellFunctional", len(vertices[0]))
+        
+        i=0
+        for vertice in vertices:
+            M.constraint('c'+str(i),Expr.dot(vertice,bellFunctional), Domain.lessThan(1))
+            i+=1
+        i=0
+        for x in range (0,len(outputsAlice)):
+            for y in range (0,len(outputsBob)):
+                for a in range (0,outputsAlice[x]):
+                    for b in range (0,outputsBob[y]):
+                        indexPointer=list(np.zeros(len(vertices[0])))
+                        indexPointer[i]=1
+                        if(a==outputsAlice[x]-1)&(b==outputsBob[y]-1):
+                            M.constraint('p('+str(i)+')',Expr.dot(bellFunctional,indexPointer),Domain.equalsTo(dist[i]))
+                        else:
+                            if(a==outputsAlice[x]-1)|(b==outputsBob[y]-1):
+                                M.constraint('p('+str(i)+')',Expr.dot(bellFunctional,indexPointer),Domain.equalsTo(dist[i]))
+                        i+=1  
+        
+        
+        # Set the objective function to (c^t * x)
+        M.objective("obj", ObjectiveSense.Maximize, Expr.dot(dist, bellFunctional))
     
-    lp = cdd.LinProg(mat)
-    lp.solve()
-    print(lp.status)
-    print(lp.obj_value)
-    print(" ".join("{0}".format(val) for val in lp.primal_solution))
+        # Solve the problem
+        M.solve()
+    
+        # Get the solution values
+        print(M.getPrimalSolutionStatus())
+        print(M.primalObjValue())
+        
+    
     
         
     
