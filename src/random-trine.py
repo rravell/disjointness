@@ -20,19 +20,19 @@ def createRandomTrine():
 
 if __name__ == '__main__':
     
-    outputsAlice = [3,4,4]
-    outputsBob = [3,3,4,4]
+    outputsAlice = [4,4,4,4]
+    outputsBob = [4,4,4,4]
     
     aliceTrines = [createRandomTrine() for _ in range(0,len(outputsAlice))]
     bobTrines = [createRandomTrine() for _ in range(0,len(outputsBob))]
         
     aliceEffects = aliceTrines
-    aliceEffects[0] = projectorsForQubitObservable(createQubitObservable([1,0,0]))
+#     aliceEffects[0] = projectorsForQubitObservable(createQubitObservable([1,0,0]))
     aliceEffects = addEffectsForAbortOutcomes(aliceEffects,2)
-    
+#     
     bobEffects = bobTrines
-    bobEffects[0] = projectorsForQubitObservable(createQubitObservable([0,1,0]))
-    bobEffects[1] = projectorsForQubitObservable(createQubitObservable([0,0,1]))
+#     bobEffects[0] = projectorsForQubitObservable(createQubitObservable([0,1,0]))
+#     bobEffects[1] = projectorsForQubitObservable(createQubitObservable([0,0,1]))
     bobEffects = addEffectsForAbortOutcomes(bobEffects,2)
     psi=createMaxEntState(2)
     
@@ -48,16 +48,19 @@ if __name__ == '__main__':
         for vertice in vertices:
             M.constraint('c'+str(i),Expr.dot(vertice,bellFunctional), Domain.lessThan(1))
             i+=1
-        
+        i=0
         for x in range (0,len(outputsAlice)):
             for y in range (0,len(outputsBob)):
-                for a,b in [(i,outputsBob[y]) for i in range(0,outputsAlice[x])]+[(outputsAlice[x],i) for i in range(0,outputsBob[y])]+[(outputsAlice[x],outputsBob[y])]:
-                    indexPointer=list(np.zeros(len(vertices[0])))
-                    index=(b+outputsAlice[x]*a)+((outputsAlice[x]*outputsBob[y]))*(y+(len(outputsAlice))*x)
-                    indexPointer[index]=1
-                    M.constraint('p('+str(index)+')',Expr.dot(bellFunctional,indexPointer),Domain.equalsTo(dist[index]))
-        
-          
+                for a in range (0,outputsAlice[x]):
+                    for b in range (0,outputsBob[y]):
+                        indexPointer=list(np.zeros(len(vertices[0])))
+                        indexPointer[i]=1
+                        if(a==outputsAlice[x]-1)&(b==outputsBob[y]-1):
+                            M.constraint('p('+str(i)+')',Expr.dot(bellFunctional,indexPointer),Domain.equalsTo(dist[i]))
+                        else:
+                            if(a==outputsAlice[x]-1)|(b==outputsBob[y]-1):
+                                M.constraint('p('+str(i)+')',Expr.dot(bellFunctional,indexPointer),Domain.equalsTo(dist[i]))
+                        i+=1  
         
         
         # Set the objective function to (c^t * x)
