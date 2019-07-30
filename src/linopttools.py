@@ -170,7 +170,7 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
     for x in range (0,len(outputsAlice)):
         s=0
         for y in range (0,outputsBob[0]):
-            s = vector[l+y]
+            s += vector[l+y]
         vertice.append(s)
         for a in range (0,len(outputsBob)):
             l+=outputsAlice[x]*outputsBob[a]
@@ -180,7 +180,7 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
     for z in range (0,len(outputsAlice)):
         s=0
         for t in range (0,outputsAlice[0]):
-            s = vector[l+outputsBob[z]*t]
+            s += vector[l+outputsBob[z]*t]
         vertice.append(s)
         l+=outputsAlice[0]*outputsBob[z]
         
