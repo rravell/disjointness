@@ -13,6 +13,7 @@ from linopttools import *
 import qutip as qt
 from itertools import product
 import picos as pic
+from gpg.results import Result
 
 def CHAINED(n,A,B):
     result = 0
@@ -21,15 +22,24 @@ def CHAINED(n,A,B):
     result+=pic.kron(A[n-1],B[n-1])-pic.kron(A[0],B[n-1])
     return result
 
+def chainedBellValue(n,p):
+    result = 0
+    for i in range(n-1):
+        for a,b in product(range(2),repeat=2):
+            result+=(-1)**(a+b)*(p[(b+2*a)+4*(i+n*i)]+p[(b+2*a)+4*(i+n*(i+1))])
+    for a,b in product(range(2),repeat=2):
+        result+=(-1)**(a+b)*(p[(b+2*a)+4*(n-1+n*(n-1))]-p[(b+2*a)+4*(n-1+n*(0))])
+    return result
+
 if __name__ == '__main__':
     
     n=3
     outputsAlice = [4 for _ in range(0,n**2)]
     outputsBob = [2 for _ in range(0,n)]
     
-    vertices=generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob) 
+#vertices=generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob) 
            
-    alpha=5
+    alpha=5.1
      
     "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
      
@@ -92,30 +102,18 @@ if __name__ == '__main__':
             except:
                 print('index'+str(x1))
                
-        
-     
-    with Model("lo1") as M:
-
-        # Create variable 'x' of length 4
-        x = M.variable("x", len(vertices), Domain.greaterThan(0.0))
-
-        # Create constraints
-        for x1,x2,y in product(range(n),repeat=3):
-            for a1,a2,b in product(range(2),repeat=3):
-                index=(b+2*a1+4*a2)+8*(y+n*x2+(n**2)*x1)
-                M.constraint('p('+str(index)+')',Expr.dot(x,list(map(lambda ver : ver[index],vertices))),Domain.equalsTo(dist[index]))
-            
-        M.constraint('norm',Expr.dot(x,np.ones((len(vertices), 1))),Domain.equalsTo(1))
-        
-        
-        # Set the objective function to (c^t * x)
-        M.objective("obj", ObjectiveSense.Maximize, 1)
-
-        # Solve the problem
-        M.solve()
-
-        # Get the solution values
-        print(M.getProblemStatus(SolutionType.Basic))
-        
-
-
+    pAlice1 = []
+    for x1,y in product(range(n),repeat=2):
+        for a1,b in product(range(2),repeat=2):
+            pAlice1.append(sum([1/n*dist[(b+2*a1+4*a2)+8*(y+n*x2+(n**2)*x1)]
+                for x2 in range(n)
+                for a2 in range(2)]))
+    pAlice2 = []
+    for x2,y in product(range(n),repeat=2):
+        for a2,b in product(range(2),repeat=2):
+            pAlice2.append(sum([1/n*dist[(b+2*a1+4*a2)+8*(y+n*x2+(n**2)*x1)]
+                    for x1 in range(n)
+                    for a1 in range(2)]))
+    
+    
+    print(chainedBellValue(n,pAlice1),chainedBellValue(n,pAlice2))

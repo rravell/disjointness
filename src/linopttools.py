@@ -126,30 +126,10 @@ def toVector(dictionary,outputsAlice,outputsBob):
                         vector.append(0)
     return vector
     
-def generateVerticesOf1bitOfOneWayCommScenarioh(outputsAlice,outputsBob):
-    effectiveOutputsBob = list(reduce(lambda acum,output : acum+[output,output],outputsBob,[]))
-    strAlice = generateStrategies(outputsAlice)
-    strAlice = [[[output,bit] for output in stgAlice for bit in (0,1)] for stgAlice in strAlice]
-    strBob = generateStrategies(effectiveOutputsBob)
-    vertices=[]
-    for stgAlice in strAlice:
-        for stgBob in strBob:
-            vector=[]
-            for x in range (0,len(outputsAlice)):
-                for y in range (0,len(outputsBob)):
-                    for a in range (0,outputsAlice[x]):
-                        for b in range (0,outputsBob[y]):
-                            if (a==stgAlice[x][0])&(b==stgBob[2*y+stgAlice[x][1]]):
-                                vector.append(1)
-                            else:
-                                vector.append(0)
-                                vertices.append(vector)
-
-    return vertices
-
 def generateStrategies(outputs):
     l=list(it.product(list(range(0,max(outputs))),repeat=len(outputs)))
-    return list(it.filterfalse(lambda tup : not reduce(lambda x,y : x&y,list(imap(lambda a,b : a<b,tup,outputs))),l))
+    return l
+    #return list(it.filterfalse(lambda tup : not reduce(lambda x,y : x&y,list(imap(lambda a,b : a<b,tup,outputs))),l))
     
 def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
     vector = []
@@ -161,26 +141,99 @@ def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
                         vector.append(1)
                     else:
                         vector.append(0)
-    return vector
+    return VerticesToCG(vector, outputsAlice, outputsBob)
 
+def VerticesToCG(vector, outputsAlice, outputsBob):
+    vertice = []
+    #Alice's marginals
+    l=0
+    for x in range (0,len(outputsAlice)):
+        s=0
+        for y in range (0,outputsBob[0]):
+            s += vector[l+y]
+        vertice.append(s)
+        for a in range (0,len(outputsBob)):
+            l+=outputsAlice[x]*outputsBob[a]
+    
+    #Bob's marginals
+    l=0
+    for z in range (0,len(outputsAlice)):
+        s=0
+        for t in range (0,outputsAlice[0]):
+            s += vector[l+outputsBob[z]*t]
+        vertice.append(s)
+        l+=outputsAlice[0]*outputsBob[z]
+        
+    #The rest of probabilities
+    s=0
+    for w in range (0,len(outputsAlice)):
+        for x in range (0,len(outputsBob)):
+            vertice.append(vertices[s])
+            s+=outputsAlice[w]*outputsBob[x]
+    return vertice
+
+def Permutation(vertice,outputsAlice,outputsBob):
+    permutedVertice = []
+    #Marginals
+    for x in range (0, len(outputsBob)):
+        permutedVertice.append(vertice[x+len(outputsAlice)])
+    for y in range (0, len(outputsAlice)):
+        permutedVertice.append(vertice[y])
+    
+    #The rest of probabilities
+    CoefficientMatrix=np.zeros((len(outputsAlice),len(outputsBob)))
+    s=0
+    #I create a matrix with the rest of probabilities in order to be easy to be permuted
+    for l in range (0, len(outputsAlice)):
+        for w in range (0, len(outputsBob)):
+            CoefficientMatrix[l][w]=vertice[s+len(outputsAlice)+len(outputsBob)]
+            s+=1
+    
+    #I apply the permutation
+    for z in range (0, len(outputsAlice)):
+        for t in range (0, len(outputsBob)):
+            permutedVertice.append(CoefficientMatrix[t][z])
+    return permutedVertice
+
+def symmetriseVertices(vertice,permutedVertice):
+    symmetricBasis = []
+    vector=1/2*(np.array(vertice)+np.array(permutedVertice))
+    for element in vector:
+        if element not in symmetricBasis:
+           symmetricBasis.append(element)
+    return symmetricBasis
+    
+    
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
-    strgsAlice = [[[stgAlice[i],comm[i]] for i in range(0,len(stgAlice))] 
-                  for stgAlice in generateStrategies(outputsAlice) for comm in communicationStrgs]
-
+    #strgsAlice = [[[stgAlice[i],comm[i]] for i in range(0,len(stgAlice))] 
+    #              for stgAlice in generateStrategies(outputsAlice) for comm in communicationStrgs]
+    maxChainedValues=set([])
+    n=3
+    chained1 = lambda p : sum([1/n*(-1)**(a1+b)*(p[(b+2*a1+4*a2)+8*(i+n*x2+(n**2)*i)]+p[(b+2*a1+4*a2)+8*(i+n*x2+(n**2)*(i+1))]+
+                                                 p[(b+2*a1+4*a2)+8*(n-1+n*x2+(n**2)*(n-1))]-p[(b+2*a1+4*a2)+8*(n-1+n*x2+(n**2)*(0))]) 
+                                           for i in range(n-1)
+                                           for x2 in range(n) 
+                                           for a1,a2,b in it.product(range(2),repeat=3)])
+    chained2 = lambda p : sum([1/n*(-1)**(a2+b)*(p[(b+2*a1+4*a2)+8*(i+n*i+(n**2)*x1)]+p[(b+2*a1+4*a2)+8*(i+n*(i+1)+(n**2)*x1)]+
+                                                 p[(b+2*a1+4*a2)+8*(n-1+n*(n-1)+(n**2)*x1)]-p[(b+2*a1+4*a2)+8*(n-1+n*0+(n**2)*x1)]) 
+                                           for i in range(n-1)
+                                           for x1 in range(n) 
+                                           for a1,a2,b in it.product(range(2),repeat=3)])
     strgsBob = generateStrategies(list(reduce(lambda acum,elem : acum+[elem,elem],outputsBob,[])))
-    
+    maxChained=0
     vertices = []
-    for stgAlice in strgsAlice:
-        for stgBob in strgsBob:
-            vector = []
-            for x in range (0,len(outputsAlice)):
-                for y in range (0,len(outputsBob)):
-                    for a in range (0,outputsAlice[x]):
-                        for b in range (0,outputsBob[y]):
-                            if (a==stgAlice[x][0])&(b==stgBob[2*y+stgAlice[x][1]]):
-                                vector.append(1)
-                            else:
-                                vector.append(0)
-            vertices.append(vector)
+    for stgAlice in generateStrategies(outputsAlice):
+        for comm in communicationStrgs:
+            for stgBob in strgsBob:
+                vector = []
+                for x in range (0,len(outputsAlice)):
+                    for y in range (0,len(outputsBob)):
+                        for a in range (0,outputsAlice[x]):
+                            for b in range (0,outputsBob[y]):
+                                if (a==stgAlice[x])&(b==stgBob[2*y+comm[x]]):
+                                    vector.append(1)
+                                else:
+                                    vector.append(0)
+                maxChainedValues.add((chained1(vector),chained2(vector)))
     return vertices
