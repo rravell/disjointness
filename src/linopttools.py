@@ -161,7 +161,59 @@ def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
                         vector.append(1)
                     else:
                         vector.append(0)
-    return vector
+    return VerticesToCG(vector, outputsAlice, outputsBob)
+
+def VerticesToCG(vector, outputsAlice, outputsBob):
+    vertice = []
+    #Alice's marginals
+    l=0
+    for x in range (0,len(outputsAlice)):
+        s=0
+        for y in range (0,outputsBob[0]):
+            s = vector[l+y]
+        vertice.append(s)
+        for a in range (0,len(outputsBob)):
+            l+=outputsAlice[x]*outputsBob[a]
+    
+    #Bob's marginals
+    l=0
+    for z in range (0,len(outputsAlice)):
+        s=0
+        for t in range (0,outputsAlice[0]):
+            s = vector[l+outputsBob[z]*t]
+        vertice.append(s)
+        l+=outputsAlice[0]*outputsBob[z]
+        
+    #The rest of probabilities
+    s=0
+    for w in range (0,len(outputsAlice)):
+        for x in range (0,len(outputsBob)):
+            vertice.append(vertices[s])
+            s+=outputsAlice[w]*outputsBob[x]
+    return vertice
+
+def Permutation(vertice,outputsAlice,outputsBob):
+    permutedvertice = []
+    #Marginals
+    for x in range (0, len(outputsBob)):
+        permutedvertice.append(vertice[x+len(outputsAlice)])
+    for y in range (0, len(outputsAlice)):
+        permutedvertice.append(vertice[y])
+    
+    #The rest of probabilities
+    CoefficientMatrix=np.zeros((len(outputsAlice),len(outputsBob)))
+    s=0
+    #I create a matrix with the rest of probabilities in order to be easy to be permuted
+    for l in range (0, len(outputsAlice)):
+        for w in range (0, len(outputsBob)):
+            CoefficientMatrix[l][w]=vertice[s+len(outputsAlice)+len(outputsBob)]
+            s+=1
+    
+    #I apply the permutation
+    for z in range (0, len(outputsAlice)):
+        for t in range (0, len(outputsBob)):
+            permutedvertice.append(CoefficientMatrix[t][z])
+    return permutedvertice
 
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
