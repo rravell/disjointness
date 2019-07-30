@@ -193,12 +193,12 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
     return vertice
 
 def Permutation(vertice,outputsAlice,outputsBob):
-    permutedvertice = []
+    permutedVertice = []
     #Marginals
     for x in range (0, len(outputsBob)):
-        permutedvertice.append(vertice[x+len(outputsAlice)])
+        permutedVertice.append(vertice[x+len(outputsAlice)])
     for y in range (0, len(outputsAlice)):
-        permutedvertice.append(vertice[y])
+        permutedVertice.append(vertice[y])
     
     #The rest of probabilities
     CoefficientMatrix=np.zeros((len(outputsAlice),len(outputsBob)))
@@ -212,9 +212,18 @@ def Permutation(vertice,outputsAlice,outputsBob):
     #I apply the permutation
     for z in range (0, len(outputsAlice)):
         for t in range (0, len(outputsBob)):
-            permutedvertice.append(CoefficientMatrix[t][z])
-    return permutedvertice
+            permutedVertice.append(CoefficientMatrix[t][z])
+    return permutedVertice
 
+def symmetriseVertices(vertice,permutedVertice):
+    symmetricBasis = []
+    vector=1/2*(np.array(vertice)+np.array(permutedVertice))
+    for element in vector:
+        if element not in symmetricBasis:
+           symmetricBasis.append(element)
+    return symmetricBasis
+    
+    
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
     strgsAlice = [[[stgAlice[i],comm[i]] for i in range(0,len(stgAlice))] 
