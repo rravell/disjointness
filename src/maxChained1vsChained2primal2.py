@@ -77,6 +77,7 @@ if __name__ == '__main__':
                                     vector.append(0)
                 pAlice1 = getFirstAliceMarginal(n, vector)
                 pAlice2 = getSecondAliceMarginal(n, vector)
+                print('('+str(chainedBellValue(n, pAlice1))+','+str(chainedBellValue(n, pAlice2))+')')
                 maxChainedValues.add((chainedBellValue(n,pAlice1),chainedBellValue(n,pAlice2)))
     print(maxChainedValues)
     
