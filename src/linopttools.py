@@ -11,6 +11,24 @@ from _functools import reduce
 from ncpol2sdpa.sdp_relaxation import imap
 import qutip as qt
 
+def getFirstAliceMarginal(n,dist):
+    pAlice1 = []
+    for x1,y in it.product(range(n),repeat=2):
+        for a1,b in it.product(range(2),repeat=2):
+            pAlice1.append(sum([1/n*dist[(b+2*a1+4*a2)+8*(y+n*x2+(n**2)*x1)]
+                for x2 in range(n)
+                for a2 in range(2)]))
+    return pAlice1
+
+def getSecondAliceMarginal(n,dist):
+    pAlice2 = []
+    for x2,y in it.product(range(n),repeat=2):
+        for a2,b in it.product(range(2),repeat=2):
+            pAlice2.append(sum([1/n*dist[(b+2*a1+4*a2)+8*(y+n*x2+(n**2)*x1)]
+                    for x1 in range(n)
+                    for a1 in range(2)]))
+    return pAlice2
+
 def createQubitObservable(unnormalizedBlochVector):
     normalizedBlochVector=1/np.linalg.norm(unnormalizedBlochVector)*np.array(unnormalizedBlochVector)
     paulies=[qt.sigmax(),qt.sigmay(),qt.sigmaz()]
@@ -168,7 +186,7 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
     s=0
     for w in range (0,len(outputsAlice)):
         for x in range (0,len(outputsBob)):
-            vertice.append(vertices[s])
+#            vertice.append(vertices[s])
             s+=outputsAlice[w]*outputsBob[x]
     return vertice
 
@@ -200,7 +218,7 @@ def symmetriseVertices(vertice,permutedVertice):
     vector=1/2*(np.array(vertice)+np.array(permutedVertice))
     for element in vector:
         if element not in symmetricBasis:
-           symmetricBasis.append(element)
+            symmetricBasis.append(element)
     return symmetricBasis
     
     
@@ -208,20 +226,8 @@ def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
     #strgsAlice = [[[stgAlice[i],comm[i]] for i in range(0,len(stgAlice))] 
     #              for stgAlice in generateStrategies(outputsAlice) for comm in communicationStrgs]
-    maxChainedValues=set([])
-    n=3
-    chained1 = lambda p : sum([1/n*(-1)**(a1+b)*(p[(b+2*a1+4*a2)+8*(i+n*x2+(n**2)*i)]+p[(b+2*a1+4*a2)+8*(i+n*x2+(n**2)*(i+1))]+
-                                                 p[(b+2*a1+4*a2)+8*(n-1+n*x2+(n**2)*(n-1))]-p[(b+2*a1+4*a2)+8*(n-1+n*x2+(n**2)*(0))]) 
-                                           for i in range(n-1)
-                                           for x2 in range(n) 
-                                           for a1,a2,b in it.product(range(2),repeat=3)])
-    chained2 = lambda p : sum([1/n*(-1)**(a2+b)*(p[(b+2*a1+4*a2)+8*(i+n*i+(n**2)*x1)]+p[(b+2*a1+4*a2)+8*(i+n*(i+1)+(n**2)*x1)]+
-                                                 p[(b+2*a1+4*a2)+8*(n-1+n*(n-1)+(n**2)*x1)]-p[(b+2*a1+4*a2)+8*(n-1+n*0+(n**2)*x1)]) 
-                                           for i in range(n-1)
-                                           for x1 in range(n) 
-                                           for a1,a2,b in it.product(range(2),repeat=3)])
     strgsBob = generateStrategies(list(reduce(lambda acum,elem : acum+[elem,elem],outputsBob,[])))
-    maxChained=0
+    
     vertices = []
     for stgAlice in generateStrategies(outputsAlice):
         for comm in communicationStrgs:
@@ -235,5 +241,5 @@ def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
                                     vector.append(1)
                                 else:
                                     vector.append(0)
-                maxChainedValues.add((chained1(vector),chained2(vector)))
+                vertices.append(vector)
     return vertices
