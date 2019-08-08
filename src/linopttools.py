@@ -190,7 +190,30 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
             s+=outputsAlice[w]*outputsBob[x]
     return vertice
 
-def Permutation(vertice,outputsAlice,outputsBob):
+def Symmetrise(vertices,inputs,outputsAlice,outputsBob):
+    SymmetricVertices = []
+    #First I transform the vector to CG notation
+    vector=VerticesToCG(vertices,outputsAlice,outputsBob)
+    #Then I fill the marginals
+    for i in range (0,inputs):
+        SymmetricVertices.append(1/2*(vector[i]+vector[i+inputs]))
+    #I create the matrix with the rest of probabilities
+    CoefficientMatrix=np.zeros((inputs,inputs))
+    s=0
+    for l in range (0,inputs):
+        for s in range (0,inputs):
+            CoefficientMatrix[l][s]=vector[s+2*inputs]
+            s+=1
+    #The rest of probabilities
+    for i in range (0,inputs):
+        SymmetricVertices.append(CoefficientMatrix[i][i])
+    for i in range (0,inputs):
+        for j in range (0,inputs):
+            if (i<j):
+                SymmetricVertices.append(1/2*(CoefficientMatrix[i][j]+CoefficientMatrix[j][i]))
+     return SymmetricVertices
+
+'''def Permutation(vertice,outputsAlice,outputsBob):
     permutedVertice = []
     #Marginals
     for x in range (0, len(outputsBob)):
@@ -219,7 +242,7 @@ def symmetriseVertices(vertice,permutedVertice):
     for element in vector:
         if element not in symmetricBasis:
             symmetricBasis.append(element)
-    return symmetricBasis
+    return symmetricBasis'''
     
     
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
