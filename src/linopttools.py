@@ -186,7 +186,7 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
     s=0
     for w in range (0,len(outputsAlice)):
         for x in range (0,len(outputsBob)):
-#            vertice.append(vertices[s])
+            vertice.append(vector[s])
             s+=outputsAlice[w]*outputsBob[x]
     return vertice
 
