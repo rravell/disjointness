@@ -4,7 +4,6 @@ import itertools as it
 from _functools import reduce
 from linopttools import *
 import qutip as qt
-import pycddlib as cdd
 
 
 if __name__ == '__main__':
@@ -14,7 +13,7 @@ if __name__ == '__main__':
   inputs=len(outputsAlice)
   vertices=generateLocalVertices(outputsAlice,outputsBob)
   symmetricVertices=Symmetrise(vertices,inputs,outputsAlice,outputsBob)
-  
+  print(symmetricVertices)
   
   
     
