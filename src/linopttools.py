@@ -122,11 +122,11 @@ def createConstraintsMatrixForEfficiencyDual(outputsAlice, outputsBob):
     
     return matrixHRepresentation    
 
-def generateLocalVertices(outputsAlice,outputsBob):
+def generateLocalSymmetricVertices(outputsAlice,outputsBob, inputs):
     aliceStrategies = generateStrategies(outputsAlice)
     bobStrategies = generateStrategies(outputsBob)
     
-    return [strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
+    return [strategyToDistribution(stgAlice,stgBob, inputs, outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
     
     
 def toString(a,b,x,y):
@@ -149,7 +149,7 @@ def generateStrategies(outputs):
     return l
     #return list(it.filterfalse(lambda tup : not reduce(lambda x,y : x&y,list(imap(lambda a,b : a<b,tup,outputs))),l))
     
-def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
+def strategyToDistribution(stgAlice, stgBob, inputs, outputsAlice,outputsBob):
     vector = []
     for x in range (0,len(outputsAlice)):
         for y in range (0,len(outputsBob)):
@@ -159,9 +159,9 @@ def strategyToDistribution(stgAlice, stgBob,outputsAlice,outputsBob):
                         vector.append(1)
                     else:
                         vector.append(0)
-    return VerticesToCG(vector, outputsAlice, outputsBob)
+    return VerticesToCG(vector, inputs, outputsAlice, outputsBob)
 
-def VerticesToCG(vector, outputsAlice, outputsBob):
+def VerticesToCG(vector, inputs, outputsAlice, outputsBob):
     vertice = []
     #Alice's marginals
     l=0
@@ -188,12 +188,12 @@ def VerticesToCG(vector, outputsAlice, outputsBob):
         for x in range (0,len(outputsBob)):
             vertice.append(vector[s])
             s+=outputsAlice[w]*outputsBob[x]
-    return vertice
+    return Symmetrise(vertice, inputs, outputsAlice, outputsBob)
 
-def Symmetrise(vertices,inputs,outputsAlice,outputsBob):
+def Symmetrise(vector,inputs,outputsAlice,outputsBob):
     SymmetricVertices = []
     #First I transform the vector to CG notation
-    vector=VerticesToCG(vertices,outputsAlice,outputsBob)
+    #vector=VerticesToCG(vertices,outputsAlice,outputsBob)
     #Then I fill the marginals
     for i in range (0,inputs):
         SymmetricVertices.append(1/2*(vector[i]+vector[i+inputs]))

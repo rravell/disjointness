@@ -8,13 +8,11 @@ import qutip as qt
 
 if __name__ == '__main__':
 
-  outputsAlice = [4,4,4,4]
-  outputsBob = [4,4,4,4]
+  outputsAlice = [2,2]
+  outputsBob = [2,2]
   inputs=len(outputsAlice)
-  vertices=generateLocalVertices(outputsAlice,outputsBob)
-  symmetricVertices=Symmetrise(vertices,inputs,outputsAlice,outputsBob)
-  print(symmetricVertices)
-  
+  vertices=generateLocalVertices(outputsAlice, outputsBob, inputs)
+  print(vertices)
   
     
   
