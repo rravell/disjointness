@@ -211,7 +211,7 @@ def Symmetrise(vertices,inputs,outputsAlice,outputsBob):
         for j in range (0,inputs):
             if (i<j):
                 SymmetricVertices.append(1/2*(CoefficientMatrix[i][j]+CoefficientMatrix[j][i]))
-     return SymmetricVertices
+    return SymmetricVertices
 
 '''def Permutation(vertice,outputsAlice,outputsBob):
     permutedVertice = []
