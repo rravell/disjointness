@@ -188,9 +188,9 @@ def VerticesToCG(vector, inputs, outputsAlice, outputsBob):
         for x in range (0,len(outputsBob)):
             vertice.append(vector[s])
             s+=outputsAlice[w]*outputsBob[x]
-    return Symmetrise(vertice, inputs, outputsAlice, outputsBob)
+    return Symmetrise(vertice, inputs)
 
-def Symmetrise(vector,inputs,outputsAlice,outputsBob):
+def Symmetrise(vector,inputs):
     SymmetricVertices = []
     #First I transform the vector to CG notation
     #vector=VerticesToCG(vertices,outputsAlice,outputsBob)
@@ -201,8 +201,8 @@ def Symmetrise(vector,inputs,outputsAlice,outputsBob):
     CoefficientMatrix=np.zeros((inputs,inputs))
     s=0
     for l in range (0,inputs):
-        for s in range (0,inputs):
-            CoefficientMatrix[l][s]=vector[s+2*inputs]
+        for w in range (0,inputs):
+            CoefficientMatrix[l][w]=vector[w+2*inputs]
             s+=1
     #The rest of probabilities
     for i in range (0,inputs):
