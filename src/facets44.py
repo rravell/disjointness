@@ -15,7 +15,7 @@ if __name__ == '__main__':
   vertices=generateLocalVertices(outputsAlice,outputsBob)
   symmetricVertices=Symmetrise(vertices,inputs,outputsAlice,outputsBob)
   
-  #print(symmetricVertices)
+  
   
     
   
