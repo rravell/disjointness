@@ -270,25 +270,35 @@ def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
 def ToNormalConfiguration(functionals,inputs,outputs):
     N=inputs
     K=outputs
-    size=np.shape(functionals)
-
-    newfunctionals=np.zeros((size[0],(N*K)**2))
-    for i in range(0,size[0]):
-        for j in range(N**2,size[1]):
-            GroupNumber=j%N
-            PositionNumber=GroupNumber*N*K**2 
-            if j<N**2+N: #ESTOS SON LOS MARGINALES DE ALICE
-                newfunctionals[i][PositionNumber]=functionals[i][j]
-                newfunctionals[i][PositionNumber+1]=functionals[i][j]
-
+    newfunctionals=np.zeros((N*K)**2)
+    for j in range (0, N):
+        for l in range (0,K-1):#Tengo en cuenta el abort
+            #Los de Alice
+            newfunctionals[l+j*K**2]+=1/2*functionals[j]
+            #Los de Bob
+            newfunctionals[(l*K)+j*K**2]+=1/2*functionals[j]
+    CoefficientMatrix=np.zeros((N,N))
+    s=0       
+    r=0
+    for w in range (0, N):
+        for j in range (0, N):
+            if (w==j):
+                CoefficientMatrix[w][j]=functionals[s+N]
+                s+=1
+            elif (w<j):
+                CoefficientMatrix[w][j]=1/2*functionals[r+2*N]
+                r+=1
+    for w in range (0,N):
+        for j in range (0,N):
+            CoefficientMatrix[j][w]=CoefficientMatrix[w][j]
+    
+    counting=0
+    for w in range (0,N):
+        for j in range (0,N):
+            newfunctionals[counting*K**2]+=CoefficientMatrix[j][w]
+            counting+=1
         
-            else: #ESTOS LOS DE BOB             
-                newfunctionals[i][N*GroupNumber]+=functionals[i][j]
-                newfunctionals[i][N*GroupNumber+2]=functionals[i][j]
-        
-    for i in range(0,size[0]): #SUMO LOS 16 PRIMEROS TERMINOS I.E. P(00|XY)
-        for j in range(0,N**2):
-            newfunctionals[i][N*j]+=functionals[i][j]       
+     
         
     return newfunctionals
     
