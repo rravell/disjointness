@@ -274,7 +274,7 @@ def ToNormalConfiguration(functionals,inputs,outputs):
     for j in range (0, N):
         for l in range (0,K-1):#Tengo en cuenta el abort
             #Los de Alice
-            newfunctionals[l+j*K**2]+=1/2*functionals[j]
+            newfunctionals[l+j*N*K**2]+=1/2*functionals[j]
             #Los de Bob
             newfunctionals[(l*K)+j*K**2]+=1/2*functionals[j]
     CoefficientMatrix=np.zeros((N,N))
