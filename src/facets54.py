@@ -14,12 +14,12 @@ if __name__ == '__main__':
     outputsBob = [4,4,4,4,4]
     inputs=len(outputsAlice)
     SymmetricVertices=generateLocalSymmetricVertices(outputsAlice, outputsBob, inputs)
-    
-    VRepresentation=np.ones((len(SymmetricVertices), len(SymmetricVertices[0])+1))
-    
-    for i in range (0, len(SymmetricVertices)):
-        VRepresentation[i][1:]=SymmetricVertices[i][:]
-    
+    FilteredSymmetricVertices=[list(t) for t in set(tuple(element) for element in SymmetricVertices)]
+    VRepresentation=np.ones((len(FilteredSymmetricVertices), len(FilteredSymmetricVertices[0])+1))
+  
+    for i in range (0, len(FilteredSymmetricVertices)):
+        VRepresentation[i][1:]=FilteredSymmetricVertices[i][:]
+
     mat = cdd.Matrix(VRepresentation, number_type='fraction')
     mat.rep_type = cdd.RepType.GENERATOR
     poly=cdd.Polyhedron(mat)
