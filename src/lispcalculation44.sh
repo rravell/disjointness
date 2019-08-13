@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIRECTORY="$HOME/git/disjointness/src"
+DIRECTORY="$HOME/disjointness/src"
 DIRTYSCRIPT="dirtyscript.lisp"
 VECTORFILE="IneffFunctionals44Lisp.txt"
 OUTPUTFILE="NPAvalue44.txt"
