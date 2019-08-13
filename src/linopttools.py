@@ -202,7 +202,7 @@ def Symmetrise(vector,inputs):
     s=0
     for l in range (0,inputs):
         for w in range (0,inputs):
-            CoefficientMatrix[l][w]=vector[w+2*inputs]
+            CoefficientMatrix[l][w]=vector[s+2*inputs]
             s+=1
     #The rest of probabilities
     for i in range (0,inputs):
@@ -212,38 +212,6 @@ def Symmetrise(vector,inputs):
             if (i<j):
                 SymmetricVertices.append(1/2*(CoefficientMatrix[i][j]+CoefficientMatrix[j][i]))
     return SymmetricVertices
-
-'''def Permutation(vertice,outputsAlice,outputsBob):
-    permutedVertice = []
-    #Marginals
-    for x in range (0, len(outputsBob)):
-        permutedVertice.append(vertice[x+len(outputsAlice)])
-    for y in range (0, len(outputsAlice)):
-        permutedVertice.append(vertice[y])
-    
-    #The rest of probabilities
-    CoefficientMatrix=np.zeros((len(outputsAlice),len(outputsBob)))
-    s=0
-    #I create a matrix with the rest of probabilities in order to be easy to be permuted
-    for l in range (0, len(outputsAlice)):
-        for w in range (0, len(outputsBob)):
-            CoefficientMatrix[l][w]=vertice[s+len(outputsAlice)+len(outputsBob)]
-            s+=1
-    
-    #I apply the permutation
-    for z in range (0, len(outputsAlice)):
-        for t in range (0, len(outputsBob)):
-            permutedVertice.append(CoefficientMatrix[t][z])
-    return permutedVertice
-
-def symmetriseVertices(vertice,permutedVertice):
-    symmetricBasis = []
-    vector=1/2*(np.array(vertice)+np.array(permutedVertice))
-    for element in vector:
-        if element not in symmetricBasis:
-            symmetricBasis.append(element)
-    return symmetricBasis'''
-    
     
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
