@@ -3,7 +3,7 @@
 DIRECTORY="$HOME/git/disjointness/src"
 DIRTYSCRIPT="dirtyscript.lisp"
 VECTORFILE="IneffFunctionals44Lisp.txt"
-OUTPUTFILE="NPAvalue.txt"
+OUTPUTFILE="NPAvalue44.txt"
 
 cat << EOF > $DIRECTORY/$DIRTYSCRIPT
 #!/usr/bin/sbcl --script
