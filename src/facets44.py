@@ -14,7 +14,7 @@ if __name__ == '__main__':
   outputsBob = [4,4,4,4]
   inputs=len(outputsAlice)
   SymmetricVertices=generateLocalSymmetricVertices(outputsAlice, outputsBob, inputs)
-  FilteredSymmetricVertices=np.matrix([list(t) for t in set(tuple(element) for element in SymmetricVertices)])
+  FilteredSymmetricVertices=[list(t) for t in set(tuple(element) for element in SymmetricVertices)]
   VRepresentation=np.ones((len(FilteredSymmetricVertices), len(FilteredSymmetricVertices[0])+1))
   
   for i in range (0, len(FilteredSymmetricVertices)):
