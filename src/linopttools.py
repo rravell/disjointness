@@ -1,4 +1,3 @@
-'''
 Created on 9 jul. 2019
 
 @author: gsenno
@@ -126,9 +125,14 @@ def generateLocalSymmetricVertices(outputsAlice,outputsBob, inputs):
     aliceStrategies = generateStrategies(outputsAlice)
     bobStrategies = generateStrategies(outputsBob)
     
-    return [strategyToDistribution(stgAlice,stgBob, inputs, outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
+    return [strategyToDistributionSymmetric(stgAlice,stgBob, inputs, outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
     
+def generateLocalVertices(outputsAlice,outputsBob):    
+    aliceStrategies = generateStrategies(outputsAlice)
+    bobStrategies = generateStrategies(outputsBob)
     
+    return [strategyToDistribution(stgAlice,stgBob,outputsAlice,outputsBob) for stgAlice in aliceStrategies for stgBob in bobStrategies]
+
 def toString(a,b,x,y):
     return str(a)+','+str(b)+'|'+str(x)+','+str(y)
     
@@ -149,7 +153,7 @@ def generateStrategies(outputs):
     return l
     #return list(it.filterfalse(lambda tup : not reduce(lambda x,y : x&y,list(imap(lambda a,b : a<b,tup,outputs))),l))
     
-def strategyToDistribution(stgAlice, stgBob, inputs, outputsAlice,outputsBob):
+def strategyToDistributionSymmetric(stgAlice, stgBob, inputs, outputsAlice,outputsBob):
     vector = []
     for x in range (0,len(outputsAlice)):
         for y in range (0,len(outputsBob)):
@@ -160,6 +164,18 @@ def strategyToDistribution(stgAlice, stgBob, inputs, outputsAlice,outputsBob):
                     else:
                         vector.append(0)
     return VerticesToCG(vector, inputs, outputsAlice, outputsBob)
+
+def strategyToDistribution(stgAlice, stgBob, outputsAlice,outputsBob):
+    vector = []
+    for x in range (0,len(outputsAlice)):
+        for y in range (0,len(outputsBob)):
+            for a in range (0,outputsAlice[x]):
+                for b in range (0,outputsBob[y]):
+                    if (a==stgAlice[x])&(b==stgBob[y]):
+                        vector.append(1)
+                    else:
+                        vector.append(0)
+    return vector
 
 def VerticesToCG(vector, inputs, outputsAlice, outputsBob):
     vertice = []
@@ -212,6 +228,9 @@ def Symmetrise(vector,inputs):
             if (i<j):
                 SymmetricVertices.append(1/2*(CoefficientMatrix[i][j]+CoefficientMatrix[j][i]))
     return SymmetricVertices
+
+
+    
     
 def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
     communicationStrgs=list(it.product([0,1],repeat=len(outputsAlice)))
@@ -234,6 +253,7 @@ def generateVertices1bitOfCommLocalPol(outputsAlice,outputsBob):
                                     vector.append(0)
                 vertices.append(vector)
     return vertices
+
 
 def ToNormalConfiguration(functionals,inputs,outputs):
     N=inputs
@@ -263,11 +283,14 @@ def ToNormalConfiguration(functionals,inputs,outputs):
     counting=0
     for w in range (0,N):
         for j in range (0,N):
-            newfunctionals[counting*K**2]+=CoefficientMatrix[w][j]
+            newfunctionals[counting*K**2]+=CoefficientMatrix[j][w]
             counting+=1
         
      
         
     return newfunctionals
+    
+
+
     
 
