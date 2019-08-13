@@ -263,7 +263,7 @@ def ToNormalConfiguration(functionals,inputs,outputs):
     counting=0
     for w in range (0,N):
         for j in range (0,N):
-            newfunctionals[counting*K**2]+=CoefficientMatrix[j][w]
+            newfunctionals[counting*K**2]+=CoefficientMatrix[w][j]
             counting+=1
         
      
