@@ -13,7 +13,7 @@ cat << EOF > $DIRECTORY/$DIRTYSCRIPT
 EOF
 
 while read -r vector; do
-	echo "(print (solve-problem (maximise $vector) (level 2)(scenario (4 4 4 4) (4 4 4 4))))" >> $DIRECTORY/$DIRTYSCRIPT
+	echo "(print (solve-problem (maximise $vector) (level 1)(scenario (4 4 4 4) (4 4 4 4))))" >> $DIRECTORY/$DIRTYSCRIPT
 done < $DIRECTORY/$VECTORFILE
 
 rm .npa_sdpa_tmp.dat-s
