@@ -36,7 +36,7 @@ if __name__ == '__main__':
       else:
           normalisation=np.array(functionals[i])
           IneffFunctionals[i]=ToNormalConfiguration(normalisation, N, K)
-      lispsyntax=lisp.syntaxlisp(lisp, IneffFunctionals[i], 4, 4)
+      lispsyntax=lisp.syntaxlisp(lisp, IneffFunctionals[i], N, K)
       text.write(lispsyntax + '\n')
   np.savetxt('IneffFunctionals.txt',IneffFunctionals)
   text.close()
