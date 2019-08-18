@@ -10,8 +10,8 @@ from sympy.combinatorics.generators import symmetric
 
 if __name__ == '__main__':
 
-  outputsAlice = [4,4,4,4]
-  outputsBob = [4,4,4,4]
+  outputsAlice = [4,4,4]
+  outputsBob = [4,4,4]
   inputs=len(outputsAlice)
   SymmetricVertices=generateLocalSymmetricVertices(outputsAlice, outputsBob, inputs)
   FilteredSymmetricVertices=[list(t) for t in set(tuple(element) for element in SymmetricVertices)]

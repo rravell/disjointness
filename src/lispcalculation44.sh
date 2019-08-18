@@ -1,9 +1,9 @@
 #!/bin/bash
 
-DIRECTORY="$HOME/disjointness/src"
+DIRECTORY="$HOME/git/disjointness/src"
 DIRTYSCRIPT="dirtyscript.lisp"
-VECTORFILE="IneffFunctionals44Lisp.txt"
-OUTPUTFILE="NPAvalue44.txt"
+VECTORFILE="aLisp.txt"
+OUTPUTFILE="aLisp-level3.txt"
 
 cat << EOF > $DIRECTORY/$DIRTYSCRIPT
 #!/usr/bin/sbcl --script
@@ -13,7 +13,7 @@ cat << EOF > $DIRECTORY/$DIRTYSCRIPT
 EOF
 
 while read -r vector; do
-	echo "(print (solve-problem (maximise $vector) (level 1)(scenario (4 4 4 4) (4 4 4 4))))" >> $DIRECTORY/$DIRTYSCRIPT
+	echo "(print (solve-problem (maximise $vector) (level 3)(scenario (4 4 4) (4 4 4))))" >> $DIRECTORY/$DIRTYSCRIPT
 done < $DIRECTORY/$VECTORFILE
 
 rm .npa_sdpa_tmp.dat-s

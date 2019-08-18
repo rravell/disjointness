@@ -3,7 +3,6 @@ Created on 9 jul. 2019
 
 @author: gsenno
 '''
-from bellpolytope import BellPolytope
 import cdd as cdd
 import numpy as np
 import itertools as it
