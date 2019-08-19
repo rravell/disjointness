@@ -1,9 +1,3 @@
-To load "npa-hierarchy":
-  Load 1 ASDF system:
-    npa-hierarchy
-; Loading "npa-hierarchy"
-
-
 1.207106732455021d0 
 -2.848673186228723d-9 
 1.2071066267296469d0 
